@@ -1,4 +1,4 @@
-package com.tainika.qlnt.qlnt.dto;
+package com.tainika.qlnt.qlnt.dto.auth;
 
 public class AuthResponse {
     private String jwt;

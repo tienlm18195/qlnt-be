@@ -1,5 +1,6 @@
 package com.tainika.qlnt.qlnt.service;
 
+import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
 import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.repository.UserRepository;
 import com.tainika.qlnt.qlnt.constants.Message;
@@ -8,17 +9,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SettingService {
     @Autowired
     private UserRepository userRepository;
 
-    public MessageResultService<List<User>> getAllUser() {
+    public MessageResultService<List<UsersResponse>> getAllUser() {
         try{
-            return new MessageResultService<>(Message.ACTION.GET_ALL, userRepository.findAll()).withSuccessResponse();
+            List<User> users = userRepository.findAll();
+            List<UsersResponse> responses = users.stream()
+                .map(User::convertToUsersResponseData)
+                .collect(Collectors.toList());
+            return new MessageResultService<>(Message.ACTION.GET_ALL, responses).withSuccessResponse();
         } catch (Exception err) {
-            return new MessageResultService<List<User>>(Message.ACTION.GET_ALL, err.getMessage(), new ArrayList<>()).withErrorResponse();
+            return new MessageResultService<List<UsersResponse>>(Message.ACTION.GET_ALL, err.getMessage(),
+                new ArrayList<>()).withErrorResponse();
         }
     }
 }

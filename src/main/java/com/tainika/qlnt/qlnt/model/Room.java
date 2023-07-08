@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document(collection="room")
-public class Room {
+public class Room extends BaseModel{
     public String id;
     public String name;
     public String price;
@@ -15,6 +15,4 @@ public class Room {
     public String electricPrice;
     public String internetPrice;
     public Integer status;
-    public String createTime;
-    public String updateTime;
 }

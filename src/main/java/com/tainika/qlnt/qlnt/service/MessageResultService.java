@@ -2,11 +2,13 @@ package com.tainika.qlnt.qlnt.service;
 
 import com.tainika.qlnt.qlnt.constants.Message;
 import com.tainika.qlnt.qlnt.constants.Status;
+import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Data
+@Builder
 public class MessageResultService<T> {
     private String action;
     private String content;

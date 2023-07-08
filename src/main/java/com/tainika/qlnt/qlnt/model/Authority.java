@@ -9,18 +9,16 @@ import java.util.Date;
 
 @Data
 @Document(collection="authority")
-public class Authority {
+public class Authority extends BaseModel {
     @Id
     private String id;
     private String name;
     @Indexed
     private String code;
-    private Date createTime;
-    private Date updateTime;
 
     public Authority(String code) {
         this.code = code;
-        this.createTime = new Date();
-        this.updateTime = new Date();
+        this.setCreateTime(new Date());
+        this.setUpdateTime(new Date());
     }
 }

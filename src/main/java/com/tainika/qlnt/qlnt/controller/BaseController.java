@@ -1,7 +1,7 @@
 package com.tainika.qlnt.qlnt.controller;
 
-import com.tainika.qlnt.qlnt.dto.AuthRequest;
-import com.tainika.qlnt.qlnt.dto.AuthResponse;
+import com.tainika.qlnt.qlnt.dto.auth.AuthRequest;
+import com.tainika.qlnt.qlnt.dto.auth.AuthResponse;
 import com.tainika.qlnt.qlnt.service.UserLoginDetailsService;
 import com.tainika.qlnt.qlnt.ultil.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,11 @@ public class BaseController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticate(@RequestBody AuthRequest authRequest) throws Exception{
-        try{
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
-            );
-        } catch (BadCredentialsException e) {
-            throw new Exception("Incorect username or password", e);
-        }
+    public ResponseEntity<?> createAuthenticate(@RequestBody AuthRequest authRequest) throws Exception {
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+        );
+
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
 

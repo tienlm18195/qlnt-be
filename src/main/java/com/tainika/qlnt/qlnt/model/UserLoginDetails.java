@@ -22,9 +22,9 @@ public class UserLoginDetails implements UserDetails {
         this.password = user.getPassword();
         this.status = user.getStatus();
         this.authorities = user.getRole().getAuthorities()
-                .stream()
-                .map(a -> new SimpleGrantedAuthority(a.getCode()))
-                .collect(Collectors.toList());
+            .stream()
+            .map(a -> new SimpleGrantedAuthority(a.getCode()))
+            .collect(Collectors.toList());
     }
 
     @Override

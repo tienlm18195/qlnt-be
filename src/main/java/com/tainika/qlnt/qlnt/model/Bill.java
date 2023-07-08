@@ -3,7 +3,7 @@ package com.tainika.qlnt.qlnt.model;
 import lombok.Data;
 
 @Data
-public class Bill {
+public class Bill extends BaseModel {
     public String id;
     public String userId;
     public String userName;
@@ -20,8 +20,4 @@ public class Bill {
     public Integer isPaid;
     public String note;
     public Integer status;
-    public String createTime;
-    public String updateTime;
-    public String createUserId;
-    public String updateUserId;
 }

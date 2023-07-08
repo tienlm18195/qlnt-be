@@ -1,6 +1,7 @@
 package com.tainika.qlnt.qlnt.service;
 
 import com.tainika.qlnt.qlnt.constants.AppUserRole;
+import com.tainika.qlnt.qlnt.dto.signup.NewUserRequest;
 import com.tainika.qlnt.qlnt.model.Role;
 import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.repository.UserRepository;
@@ -9,8 +10,6 @@ import com.tainika.qlnt.qlnt.constants.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 public class RegistrationService {
@@ -28,51 +27,41 @@ public class RegistrationService {
         return userRepository.save(newUser);
     }
 
-    public MessageResultService<?> signUp(User user) {
+    public MessageResultService<?> signUp(NewUserRequest request) {
         try {
-            boolean isExistedUser = userRepository.isExistedUserName(user.getUserName());
+            boolean isExistedUser = userRepository.isExistedUserName(request.getUserName());
             if (isExistedUser) {
                 return new MessageResultService<>(Message.ACTION.SIGN_UP, Message.ALERT.USER_EXISTED, null)
-                        .withFailureResponse();
+                    .withFailureResponse();
             }
 
-            boolean isExistedEmail = userRepository.isExistedEmail(user.getEmail());
+            boolean isExistedEmail = userRepository.isExistedEmail(request.getEmail());
             if (isExistedEmail) {
                 return new MessageResultService<>(Message.ACTION.SIGN_UP, Message.ALERT.EMAIL_EXISTED, null)
-                        .withFailureResponse();
+                    .withFailureResponse();
             }
 
-            user.setPassword(encoder.encode(user.getPassword()));
-            user.setCreateTime(new Date());
-            user.setUpdateTime(new Date());
-            user.setStatus(Status.USER.TEMPORARY.getCode());
-
-            MessageResultService<?> oldRole = roleService.findByRoleCode(AppUserRole.GUEST.getCode());
-            if (oldRole.getStatus().equals(Status.COMMON.ERROR)) {
-                return new MessageResultService<>(Message.ACTION.SIGN_UP, oldRole.getResponseMessage() ,null)
-                        .withErrorResponse();
-            } else if (oldRole.getStatus().equals(Status.COMMON.FAILURE)) {
+            Role role = roleService.findByRoleCode(AppUserRole.GUEST.getCode());
+            if (role == null) {
                 MessageResultService<?> newRole = roleService.create(AppUserRole.GUEST.getCode());
-
                 if (newRole.getStatus().equals(Status.COMMON.ERROR)) {
                     return new MessageResultService<>(Message.ACTION.SIGN_UP, newRole.getResponseMessage() ,null)
-                            .withFailureResponse();
-                } else {
-                    Role r = (Role) newRole.getItem();
-                    user.setRole(r);
+                        .withFailureResponse();
                 }
-            } else if (oldRole.getStatus().equals(Status.COMMON.SUCCESS)) {
-                Role r = (Role) oldRole.getItem();
-                if (r != null) {
-                    user.setRole(r);
-                }
+
+                role = (Role) newRole.getItem();
             }
 
-            User rUser = userRepository.save(user);
-            return new MessageResultService<>(Message.ACTION.SIGN_UP, rUser).withSuccessResponse();
+            User newUser = request.convertToUser(encoder.encode(request.getPassword()));
+            newUser.setRole(role);
+            userRepository.save(newUser);
+            return new MessageResultService<>(
+                Message.ACTION.SIGN_UP,
+                newUser.convertToNewUserResponseData()
+            ).withSuccessResponse();
         } catch (Exception err) {
             return new MessageResultService<>(Message.ACTION.SIGN_UP, err.getMessage(), null)
-                    .withErrorResponse();
+                .withErrorResponse();
         }
     }
 }

@@ -1,14 +1,15 @@
 package com.tainika.qlnt.qlnt.model;
 
+import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
+import com.tainika.qlnt.qlnt.dto.signup.NewUserResponse;
+import com.tainika.qlnt.qlnt.repository.UserRepository;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 @Data
 @Document(collection="user")
-public class User {
+public class User extends BaseModel {
     @Id
     private String id;
     private Role role;
@@ -20,7 +21,7 @@ public class User {
     private String fullName;
     private String email;
     private Integer age;
-    private String birthYear;
+    private Integer birthYear;
     private String phone;
     private String identityNumber;
     private String address;
@@ -29,8 +30,31 @@ public class User {
     private String avatarPath;
     private String identityImagePath;
     private Integer status;
-    private Integer isBlackList;
+    private boolean isBlackList;
     private Integer acceptorId;
-    private Date createTime;
-    private Date updateTime;
+
+    public NewUserResponse convertToNewUserResponseData() {
+        return NewUserResponse.builder()
+            .userName(userName)
+            .age(age)
+            .email(email)
+            .phoneNumber(phone)
+            .identityNumber(identityNumber)
+            .address(address)
+            .currentAddress(currentAddress)
+            .build();
+    }
+
+    public UsersResponse convertToUsersResponseData() {
+        return UsersResponse.builder()
+            .userName(userName)
+            .email(email)
+            .fullName(fullName)
+            .birthYear(birthYear)
+            .workPlace(workPlace)
+            .avatarPath(avatarPath)
+            .status(status)
+            .isBlackList(isBlackList)
+            .build();
+    }
 }

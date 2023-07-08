@@ -10,14 +10,12 @@ import java.util.List;
 
 @Data
 @Document(collection="role")
-public class Role {
+public class Role extends BaseModel{
     @Id
     private String id;
     private String name;
     @Indexed
     private String code;
     private Integer status;
-    private Date createTime;
-    private Date updateTime;
     private List<Authority> authorities;
 }

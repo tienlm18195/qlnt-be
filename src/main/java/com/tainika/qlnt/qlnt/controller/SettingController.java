@@ -1,5 +1,6 @@
 package com.tainika.qlnt.qlnt.controller;
 
+import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
 import com.tainika.qlnt.qlnt.service.MessageResultService;
 import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.service.SettingService;
@@ -15,14 +16,14 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/settings_service")
+@RequestMapping("/api/ss")
 public class SettingController {
     @Autowired
     SettingService settingService;
 
-    @GetMapping(path = "/ss0002")
+    @GetMapping(path = "/users")
     public ResponseEntity<?> findAllUser() {
-        MessageResultService<List<User>> messageResultService = settingService.getAllUser();
+        MessageResultService<List<UsersResponse>> messageResultService = settingService.getAllUser();
         if (messageResultService.getItem().isEmpty()) {
             return new ResponseEntity<>(messageResultService.getResponseMessage(), HttpStatus.OK);
         }
