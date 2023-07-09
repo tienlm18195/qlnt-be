@@ -27,6 +27,7 @@ public interface Message {
         String SIGN_UP = "Sign up";
         String SIGN_IN = "Sign in";
         String GET_ALL = "Get all";
+        String GET_DETAIL = "Get detail";
 
         String SEARCH = "Search";
 

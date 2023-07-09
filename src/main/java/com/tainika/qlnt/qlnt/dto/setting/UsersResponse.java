@@ -1,17 +1,20 @@
 package com.tainika.qlnt.qlnt.dto.setting;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsersResponse {
-    private String userName;
-    private String fullName;
-    private String email;
-    private Integer birthYear;
-    private String workPlace;
-    private String avatarPath;
-    private Integer status;
-    private boolean isBlackList;
+    protected String userId;
+    protected String fullName;
+    protected String email;
+    protected Integer birthYear;
+    protected String avatarPath;
+    protected Integer status;
+    protected boolean isBlackList;
 }

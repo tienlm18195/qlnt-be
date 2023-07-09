@@ -1,18 +1,12 @@
 package com.tainika.qlnt.qlnt.controller;
 
-import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
-import com.tainika.qlnt.qlnt.service.MessageResultService;
-import com.tainika.qlnt.qlnt.model.User;
+import com.tainika.qlnt.qlnt.dto.setting.UserDetailRequest;
 import com.tainika.qlnt.qlnt.service.SettingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -23,10 +17,17 @@ public class SettingController {
 
     @GetMapping(path = "/users")
     public ResponseEntity<?> findAllUser() {
-        MessageResultService<List<UsersResponse>> messageResultService = settingService.getAllUser();
-        if (messageResultService.getItem().isEmpty()) {
-            return new ResponseEntity<>(messageResultService.getResponseMessage(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(messageResultService.getItem(), HttpStatus.OK);
+        return new ResponseEntity<>(settingService.getAllUser(), HttpStatus.OK);
     }
+
+    @GetMapping(path = "/users/{id}")
+    public ResponseEntity<?> findById(@PathVariable String id) {
+        return new ResponseEntity<>(settingService.getUserDetailById(id), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/user/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserDetailRequest request) {
+        return new ResponseEntity<>(settingService.updateUser(id, request), HttpStatus.OK);
+    }
+
 }

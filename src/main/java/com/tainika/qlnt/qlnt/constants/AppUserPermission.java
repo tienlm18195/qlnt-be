@@ -6,6 +6,7 @@ public enum AppUserPermission {
     MR01("MR01"),
 
     UR01("UR01"),
+    UR02("UR02"),
 
     GR01("GR01");
 

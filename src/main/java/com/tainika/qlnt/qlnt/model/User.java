@@ -1,9 +1,10 @@
 package com.tainika.qlnt.qlnt.model;
 
+import com.tainika.qlnt.qlnt.dto.setting.UserDetailResponse;
 import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
 import com.tainika.qlnt.qlnt.dto.signup.NewUserResponse;
-import com.tainika.qlnt.qlnt.repository.UserRepository;
 import lombok.Data;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User extends BaseModel {
     @Id
     private String id;
+    @Lazy
     private Role role;
     private String roomId;
     private String roomName;
@@ -25,7 +27,6 @@ public class User extends BaseModel {
     private String phone;
     private String identityNumber;
     private String address;
-    private String currentAddress;
     private String workPlace;
     private String avatarPath;
     private String identityImagePath;
@@ -41,18 +42,34 @@ public class User extends BaseModel {
             .phoneNumber(phone)
             .identityNumber(identityNumber)
             .address(address)
-            .currentAddress(currentAddress)
             .build();
     }
 
-    public UsersResponse convertToUsersResponseData() {
+    public UsersResponse convertToGetUsersResponseData() {
         return UsersResponse.builder()
-            .userName(userName)
+            .userId(id)
             .email(email)
             .fullName(fullName)
             .birthYear(birthYear)
+            .avatarPath(avatarPath)
+            .status(status)
+            .isBlackList(isBlackList)
+            .build();
+    }
+
+    public UserDetailResponse convertToDetailUserResponseData() {
+        return UserDetailResponse.builder()
+            .userId(id)
+            .userName(userName)
+            .fullName(fullName)
+            .email(email)
+            .phone(phone)
+            .identityNumber(identityNumber)
+            .address(address)
+            .birthYear(birthYear)
             .workPlace(workPlace)
             .avatarPath(avatarPath)
+            .identityImagePath(identityImagePath)
             .status(status)
             .isBlackList(isBlackList)
             .build();

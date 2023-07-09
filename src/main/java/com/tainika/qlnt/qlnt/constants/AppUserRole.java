@@ -8,7 +8,7 @@ import static com.tainika.qlnt.qlnt.constants.AppUserPermission.*;
 public enum AppUserRole {
     ADMIN("ADMIN", Sets.newHashSet(AM01)),
     MANAGER("MANAGER", Sets.newHashSet(MR01)),
-    USER("USER", Sets.newHashSet(UR01)),
+    USER("USER", Sets.newHashSet(UR01, UR02)),
     GUEST("GUEST", Sets.newHashSet(GR01));
 
     private String code;

@@ -16,6 +16,10 @@ public class MessageResultService<T> {
     private Integer status;
     private T item;
 
+    public MessageResultService(String action) {
+        this.action = action;
+    }
+
     public MessageResultService(String action, T item) {
         this.action = action;
         this.content = item.toString();
