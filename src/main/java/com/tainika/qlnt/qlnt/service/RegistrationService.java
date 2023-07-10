@@ -1,6 +1,5 @@
 package com.tainika.qlnt.qlnt.service;
 
-import com.tainika.qlnt.qlnt.constants.AppUserRole;
 import com.tainika.qlnt.qlnt.dto.signup.NewUserRequest;
 import com.tainika.qlnt.qlnt.model.Role;
 import com.tainika.qlnt.qlnt.model.User;
@@ -10,6 +9,9 @@ import com.tainika.qlnt.qlnt.constants.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.tainika.qlnt.qlnt.constants.AppUserRole.ADMIN;
+import static com.tainika.qlnt.qlnt.constants.AppUserRole.GUEST;
 
 @Service
 public class RegistrationService {
@@ -41,9 +43,11 @@ public class RegistrationService {
                     .withFailureResponse();
             }
 
-            Role role = roleService.findByRoleCode(AppUserRole.GUEST.getCode());
+            boolean isAdmin = isAdmin(request.getUserName());
+            Role role = roleService.findByRoleCode(isAdmin ? ADMIN : GUEST);
             if (role == null) {
-                MessageResultService<?> newRole = roleService.create(AppUserRole.GUEST.getCode());
+                MessageResultService<?> newRole = roleService.create(isAdmin ? ADMIN : GUEST);
+
                 if (newRole.getStatus().equals(Status.COMMON.ERROR)) {
                     return new MessageResultService<>(Message.ACTION.SIGN_UP, newRole.getResponseMessage() ,null)
                         .withFailureResponse();
@@ -63,5 +67,9 @@ public class RegistrationService {
             return new MessageResultService<>(Message.ACTION.SIGN_UP, err.getMessage(), null)
                 .withErrorResponse();
         }
+    }
+
+    private boolean isAdmin(String admin) {
+        return admin.equalsIgnoreCase("admin");
     }
 }
