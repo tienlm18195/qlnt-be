@@ -2,6 +2,7 @@ package com.tainika.qlnt.qlnt.controller;
 
 import com.tainika.qlnt.qlnt.dto.setting.UserDetailRequest;
 import com.tainika.qlnt.qlnt.dto.setting.UsersRequest;
+import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
 import com.tainika.qlnt.qlnt.service.SettingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class SettingController {
     SettingService settingService;
 
     @GetMapping(path = "/users")
-    public ResponseEntity<?> findAllUser(@RequestBody UsersRequest request) {
+    public ResponseEntity<UsersResponse> findAllUser(@RequestBody UsersRequest request) throws Exception {
         return new ResponseEntity<>(settingService.getAllUser(request), HttpStatus.OK);
     }
 

@@ -67,43 +67,70 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         );
         query.with(pageable);
 
-        List<Criteria> criteriaList = Lists.newArrayList();
-        if (isNotBlank(request.getFullName())) {
-            criteriaList.add(Criteria.where(FULL_NAME_FIELD)
-                .regex(Pattern.compile(request.getFullName(), Pattern.CASE_INSENSITIVE)));
-        }
-
-        if (isNotBlank(request.getEmail())) {
-            criteriaList.add(Criteria.where(EMAIL_FIELD)
-                .is(request.getEmail()));
-        }
-
-        if (isNotBlank(request.getPhone())) {
-            criteriaList.add(Criteria.where(PHONE_FIELD)
-                .is(request.getEmail()));
-        }
-
-        if (isNotBlank(request.getIdentityNumber())) {
-            criteriaList.add(Criteria.where(IDENTITY_NUMBER_FIELD)
-                .is(request.getEmail()));
-        }
-
-        if (isNotBlank(request.getAddress())) {
-            criteriaList.add(Criteria.where(ADDRESS_NUMBER_FIELD)
-                .is(request.getEmail()));
-        }
-
-        if (request.getStatus() >= 0) {
-            criteriaList.add(Criteria.where(STATUS_FIELD)
-                .is(request.getEmail()));
-        }
-        criteriaList.add(Criteria.where(IS_DELETED_FIELD).is(request.isDeleted()));
-        criteriaList.add(Criteria.where(IS_BLACK_LIST_FIELD).is(request.isBlackList()));
+        List<Criteria> criteriaList = getAllCriteriaByReqFilter(request);
         criteria.andOperator(criteriaList.toArray(new Criteria[0]));
 
         query.addCriteria(criteria);
         return this.mongoTemplate.find(query, User.class);
     }
 
+    public long countTotalUsersRecord(UsersRequest request) {
+        final Query query = new Query();
+        Criteria criteria = new Criteria();
 
+        List<Criteria> criteriaList = getAllCriteriaByReqFilter(request);
+        criteria.andOperator(criteriaList.toArray(new Criteria[0]));
+
+        query.addCriteria(criteria);
+        return this.mongoTemplate.count(query, User.class);
+    }
+
+    private List<Criteria> getAllCriteriaByReqFilter(UsersRequest request) {
+        List<Criteria> criteriaList = Lists.newArrayList();
+        if (isNotBlank(request.getFullName())) {
+            criteriaList.add(
+                Criteria.where(FULL_NAME_FIELD)
+                    .regex(Pattern.compile(request.getFullName(), Pattern.CASE_INSENSITIVE))
+            );
+        }
+
+        if (isNotBlank(request.getEmail())) {
+            criteriaList.add(
+                Criteria.where(EMAIL_FIELD)
+                    .is(request.getEmail())
+            );
+        }
+
+        if (isNotBlank(request.getPhone())) {
+            criteriaList.add(
+                Criteria.where(PHONE_FIELD)
+                    .is(request.getEmail())
+            );
+        }
+
+        if (isNotBlank(request.getIdentityNumber())) {
+            criteriaList.add(
+                Criteria.where(IDENTITY_NUMBER_FIELD)
+                    .is(request.getEmail())
+            );
+        }
+
+        if (isNotBlank(request.getAddress())) {
+            criteriaList.add(
+                Criteria.where(ADDRESS_NUMBER_FIELD)
+                    .is(request.getEmail())
+            );
+        }
+
+        if (request.getStatus() >= 0) {
+            criteriaList.add(
+                Criteria.where(STATUS_FIELD)
+                    .is(request.getStatus())
+            );
+        }
+
+        criteriaList.add(Criteria.where(IS_DELETED_FIELD).is(request.isDeleted()));
+        criteriaList.add(Criteria.where(IS_BLACK_LIST_FIELD).is(request.isBlackList()));
+        return criteriaList;
+    }
 }

@@ -5,16 +5,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsersResponse {
-    protected String userId;
-    protected String fullName;
-    protected String email;
-    protected Integer birthYear;
-    protected String avatarPath;
-    protected Integer status;
-    protected boolean isBlackList;
+    private List<UserRecord> users;
+    private int page;
+    private int size;
+    private int total;
+
+    @Data
+    @Builder
+    public static class UserRecord {
+        private String userId;
+        private String fullName;
+        private String email;
+        private Integer birthYear;
+        private String avatarPath;
+        private Integer status;
+        private boolean isBlackList;
+    }
 }

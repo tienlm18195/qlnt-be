@@ -12,4 +12,5 @@ public interface UserRepositoryCustom {
     boolean isExistedEmail(String email);
 
     List<User> searchAllUser(UsersRequest request);
+    long countTotalUsersRecord(UsersRequest request);
 }

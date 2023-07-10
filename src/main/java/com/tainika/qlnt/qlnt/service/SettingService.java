@@ -8,32 +8,45 @@ import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.repository.UserRepository;
 import com.tainika.qlnt.qlnt.constants.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.tainika.qlnt.qlnt.constants.Message.ACTION.GET_ALL;
+
 @Service
 public class SettingService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public MessageResultService<List<UsersResponse>> getAllUser(UsersRequest request) {
+    @Autowired
+    public SettingService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public UsersResponse getAllUser(UsersRequest request) throws Exception {
         try{
             List<User> users = userRepository.searchAllUser(request);
-            List<UsersResponse> responses = users.stream()
-                .map(User::convertToGetUsersResponseData)
+            long totalRecords = userRepository.countTotalUsersRecord(request);
+            List<UsersResponse.UserRecord> records = users.stream()
+                .map(User::convertToGetUserRecordResponseData)
                 .collect(Collectors.toList());
-            return new MessageResultService<>(Message.ACTION.GET_ALL, responses).withSuccessResponse();
+
+            return UsersResponse.builder()
+                .users(records)
+                .page(request.getPage())
+                .size(request.getSize())
+                .total((int) totalRecords)
+                .build();
         } catch (Exception err) {
-            return new MessageResultService<List<UsersResponse>>(Message.ACTION.GET_ALL, err.getMessage(),
-                new ArrayList<>()).withErrorResponse();
+            throw MessageResultService.builder()
+                .action(GET_ALL)
+                .responseMessage(err.getMessage())
+                .build()
+            .withErrorResponse().throwException();
         }
     }
 

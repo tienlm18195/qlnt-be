@@ -1,10 +1,12 @@
 package com.tainika.qlnt.qlnt.service;
 
+import com.google.common.base.Strings;
 import com.tainika.qlnt.qlnt.constants.Message;
-import com.tainika.qlnt.qlnt.constants.Status;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+
+import static com.tainika.qlnt.qlnt.constants.Status.COMMON.*;
 
 @Slf4j
 @Data
@@ -42,22 +44,26 @@ public class MessageResultService<T> {
 
     public MessageResultService<T> withSuccessResponse() {
         this.responseMessage = String.format(Message.LOG.ACTION_SUCCESS.getName(), action, content);
-        this.status = Status.COMMON.SUCCESS;
+        this.status = SUCCESS;
         log.info(responseMessage);
         return this;
     }
 
     public MessageResultService<T> withFailureResponse() {
         this.responseMessage = String.format(Message.LOG.ACTION_FAIL.getName(), action, content);
-        this.status = Status.COMMON.FAILURE;
+        this.status = FAILURE;
         log.info(responseMessage);
         return this;
     }
 
     public MessageResultService<T> withErrorResponse() {
         this.responseMessage = String.format(Message.LOG.ACTION_ERROR.getName(), action, content);
-        this.status = Status.COMMON.ERROR;
+        this.status = ERROR;
         log.error(responseMessage);
         return this;
+    }
+
+    public Exception throwException() {
+        return new RuntimeException(Strings.nullToEmpty(responseMessage));
     }
 }

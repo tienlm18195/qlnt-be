@@ -48,8 +48,8 @@ public class User extends BaseModel {
             .build();
     }
 
-    public UsersResponse convertToGetUsersResponseData() {
-        return UsersResponse.builder()
+    public UsersResponse.UserRecord convertToGetUserRecordResponseData() {
+        return UsersResponse.UserRecord.builder()
             .userId(id)
             .email(email)
             .fullName(fullName)
