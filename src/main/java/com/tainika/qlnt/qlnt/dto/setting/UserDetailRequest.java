@@ -24,7 +24,8 @@ public class UserDetailRequest {
     public User updateUserByAuthorityOfLoginUser(User updateUser, List<String> authorities) {
         authorities.forEach(auth -> {
             switch (AppUserPermission.valueOf(auth)) {
-                case UR01:
+                case AM01:
+                case MR01:
                     updateUser.setFullName(fullName);
                     updateUser.setPhone(phone);
                     updateUser.setEmail(email);
@@ -33,9 +34,6 @@ public class UserDetailRequest {
                     updateUser.setWorkPlace(workPlace);
                     updateUser.setBirthYear(birthYear);
                     updateUser.setAvatarPath(avatarPath);
-                    break;
-                case AM01:
-                case MR01:
                     updateUser.setStatus(status);
                     updateUser.setBlackList(isBlackList);
                 default:

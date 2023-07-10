@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.tainika.qlnt.qlnt.constants.Message.ACTION.GET_ALL;
+import static com.tainika.qlnt.qlnt.constants.Message.ACTION.*;
+import static com.tainika.qlnt.qlnt.constants.Message.ALERT.NO_RESULT;
 
 @Service
 public class SettingService {
@@ -50,17 +51,20 @@ public class SettingService {
         }
     }
 
-    public MessageResultService<UserDetailResponse> getUserDetailById(String userId) {
+    public UserDetailResponse getUserDetailById(String userId) throws Exception {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
-            return new MessageResultService<>(Message.ACTION.GET_DETAIL, user.convertToDetailUserResponseData())
-                .withSuccessResponse();
+            return user.convertToDetailUserResponseData();
         }
-        return new MessageResultService<UserDetailResponse>(Message.ACTION.GET_DETAIL)
-            .withFailureResponse();
+
+        throw MessageResultService.builder()
+            .action(GET_DETAIL)
+            .content(NO_RESULT)
+            .build()
+        .withFailureResponse().throwException();
     }
 
-    public MessageResultService<UserDetailResponse> updateUser(String userId, UserDetailRequest request) {
+    public UserDetailResponse updateUser(String userId, UserDetailRequest request) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<String> authorities = auth.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
@@ -71,10 +75,13 @@ public class SettingService {
             User updated = request.updateUserByAuthorityOfLoginUser(updateUser, authorities);
             userRepository.save(updated);
 
-            return new MessageResultService<>(Message.ACTION.UPDATE, updated.convertToDetailUserResponseData())
-                .withSuccessResponse();
+            return updated.convertToDetailUserResponseData();
         }
-        return new MessageResultService<UserDetailResponse>(Message.ACTION.UPDATE)
-            .withFailureResponse();
+
+        throw MessageResultService.builder()
+            .action(UPDATE)
+            .content("Update user are not existed")
+            .build()
+        .withFailureResponse().throwException();
     }
 }

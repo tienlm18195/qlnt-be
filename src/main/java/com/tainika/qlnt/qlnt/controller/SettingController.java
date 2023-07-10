@@ -22,13 +22,13 @@ public class SettingController {
         return new ResponseEntity<>(settingService.getAllUser(request), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/users/{id}")
-    public ResponseEntity<?> findById(@PathVariable String id) {
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<?> findById(@PathVariable String id) throws Exception {
         return new ResponseEntity<>(settingService.getUserDetailById(id), HttpStatus.OK);
     }
 
     @PutMapping(path = "/user/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserDetailRequest request) {
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserDetailRequest request) throws Exception {
         return new ResponseEntity<>(settingService.updateUser(id, request), HttpStatus.OK);
     }
 
