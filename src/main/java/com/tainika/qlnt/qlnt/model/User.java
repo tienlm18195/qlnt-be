@@ -6,6 +6,7 @@ import com.tainika.qlnt.qlnt.dto.signup.NewUserResponse;
 import lombok.Data;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -17,10 +18,12 @@ public class User extends BaseModel {
     private Role role;
     private String roomId;
     private String roomName;
+    @Indexed
     private String userName;
     private String password;
     private String salt;
     private String fullName;
+    @Indexed
     private String email;
     private Integer age;
     private Integer birthYear;

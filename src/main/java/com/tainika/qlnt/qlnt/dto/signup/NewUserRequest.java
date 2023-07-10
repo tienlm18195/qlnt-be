@@ -31,7 +31,6 @@ public class NewUserRequest {
         rs.setPhone(nullToEmpty(phoneNumber));
         rs.setIdentityNumber(nullToEmpty(identityNumber));
         rs.setAddress(nullToEmpty(address));
-        rs.setCurrentAddress(nullToEmpty(currentAddress));
 
         rs.setCreateTime(now());
         rs.setUpdateTime(now());

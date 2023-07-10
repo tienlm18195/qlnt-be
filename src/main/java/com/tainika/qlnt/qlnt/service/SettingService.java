@@ -2,11 +2,14 @@ package com.tainika.qlnt.qlnt.service;
 
 import com.tainika.qlnt.qlnt.dto.setting.UserDetailRequest;
 import com.tainika.qlnt.qlnt.dto.setting.UserDetailResponse;
+import com.tainika.qlnt.qlnt.dto.setting.UsersRequest;
 import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
 import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.repository.UserRepository;
 import com.tainika.qlnt.qlnt.constants.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +24,9 @@ public class SettingService {
     @Autowired
     private UserRepository userRepository;
 
-    public MessageResultService<List<UsersResponse>> getAllUser() {
+    public MessageResultService<List<UsersResponse>> getAllUser(UsersRequest request) {
         try{
-            List<User> users = userRepository.findAll();
+            List<User> users = userRepository.searchAllUser(request);
             List<UsersResponse> responses = users.stream()
                 .map(User::convertToGetUsersResponseData)
                 .collect(Collectors.toList());
