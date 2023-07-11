@@ -10,6 +10,7 @@ import com.tainika.qlnt.qlnt.constants.AppUserPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -25,8 +26,14 @@ public class RoleService {
     @Autowired
     private AuthorityRepository authorityRepository;
 
-    public Role findByRoleCode(AppUserRole role) {
+    public Role findByRoleCodeFromDB(AppUserRole role) {
         return roleRepository.findByRoleCode(role.getCode());
+    }
+
+    public List<String> findAllRoleCode() {
+        return Arrays.stream(AppUserRole.values())
+            .map(AppUserRole::getCode)
+            .collect(Collectors.toList());
     }
 
     public MessageResultService<?> create(AppUserRole role) {

@@ -16,14 +16,24 @@ import static com.tainika.qlnt.qlnt.constants.AppUserRole.GUEST;
 @Service
 public class RegistrationService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final BaseService baseService;
+
+    private final PasswordEncoder encoder;
+
+    private final RoleService roleService;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
-    private RoleService roleService;
+    public RegistrationService(BaseService baseService,
+                               PasswordEncoder encoder,
+                               RoleService roleService,
+                               UserRepository userRepository) {
+        this.baseService = baseService;
+        this.encoder = encoder;
+        this.roleService = roleService;
+        this.userRepository = userRepository;
+    }
 
     public User createNewUser(User newUser) {
         return userRepository.save(newUser);
@@ -44,17 +54,7 @@ public class RegistrationService {
             }
 
             boolean isAdmin = isAdmin(request.getUserName());
-            Role role = roleService.findByRoleCode(isAdmin ? ADMIN : GUEST);
-            if (role == null) {
-                MessageResultService<?> newRole = roleService.create(isAdmin ? ADMIN : GUEST);
-
-                if (newRole.getStatus().equals(Status.COMMON.ERROR)) {
-                    return new MessageResultService<>(Message.ACTION.SIGN_UP, newRole.getResponseMessage() ,null)
-                        .withFailureResponse();
-                }
-
-                role = (Role) newRole.getItem();
-            }
+            Role role = baseService.getOrCreateRole(isAdmin ? ADMIN : GUEST);
 
             User newUser = request.convertToUser(encoder.encode(request.getPassword()));
             newUser.setRole(role);

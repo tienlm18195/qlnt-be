@@ -1,10 +1,15 @@
 package com.tainika.qlnt.qlnt.dto.setting;
 
-import com.tainika.qlnt.qlnt.constants.AppUserPermission;
+import com.tainika.qlnt.qlnt.constants.AppUserRole;
+import com.tainika.qlnt.qlnt.model.Role;
 import com.tainika.qlnt.qlnt.model.User;
+import com.tainika.qlnt.qlnt.service.BaseService;
 import lombok.Data;
 
 import java.util.List;
+import java.util.function.Function;
+
+import static org.apache.logging.log4j.util.Strings.isNotBlank;
 
 @Data
 public class UserDetailRequest {
@@ -19,26 +24,48 @@ public class UserDetailRequest {
     private Integer birthYear;
     private String avatarPath;
     private Integer status;
+    private String role;
     private boolean isBlackList;
 
-    public User updateUserByAuthorityOfLoginUser(User updateUser, List<String> authorities) {
-        authorities.forEach(auth -> {
-            switch (AppUserPermission.valueOf(auth)) {
-                case AM01:
-                case MR01:
-                    updateUser.setFullName(fullName);
-                    updateUser.setPhone(phone);
-                    updateUser.setEmail(email);
-                    updateUser.setAddress(address);
-                    updateUser.setIdentityNumber(identityNumber);
-                    updateUser.setWorkPlace(workPlace);
-                    updateUser.setBirthYear(birthYear);
-                    updateUser.setAvatarPath(avatarPath);
-                    updateUser.setStatus(status);
-                    updateUser.setBlackList(isBlackList);
-                default:
+    public User updateUserByAuthorityOfLoginUser(User updateUser,
+                                                 List<String> authorities,
+                                                 Function<AppUserRole, Role> getRoleFunc) {
+        boolean isUpdateUserName = isNotBlank(userName) && !userName.equals(updateUser.getUserName());
+        if (isUpdateUserName) updateUser.setUserName(userName);
+
+        boolean isUpdateFullName = isNotBlank(fullName) && !fullName.equals(updateUser.getFullName());
+        if (isUpdateFullName) updateUser.setFullName(fullName);
+
+        boolean isUpdatePhone = isNotBlank(phone) && !phone.equals(updateUser.getPhone());
+        if (isUpdatePhone) updateUser.setPhone(phone);
+
+        boolean isUpdateEmail = isNotBlank(email) && !email.equals(updateUser.getEmail());
+        if (isUpdateEmail) updateUser.setEmail(email);
+
+        boolean isUpdateAddress = isNotBlank(address) && !address.equals(updateUser.getAddress());
+        if (isUpdateAddress) updateUser.setAddress(address);
+
+        boolean isUpdateIdentityNumber = isNotBlank(identityNumber) && !identityNumber.equals(updateUser.getIdentityNumber());
+        if (isUpdateIdentityNumber) updateUser.setIdentityNumber(identityNumber);
+
+        boolean isUpdateWorkPlace = isNotBlank(workPlace) && !workPlace.equals(updateUser.getWorkPlace());
+        if (isUpdateWorkPlace) updateUser.setWorkPlace(workPlace);
+
+        boolean isUpdateBirthYear = birthYear != null && birthYear > 0 && !birthYear.equals(updateUser.getBirthYear());
+        if (isUpdateBirthYear) updateUser.setBirthYear(birthYear);
+
+        boolean isUpdateAvatarPath = isNotBlank(avatarPath) && !avatarPath.equals(updateUser.getAvatarPath());
+        if (isUpdateAvatarPath) updateUser.setAvatarPath(avatarPath);
+
+        boolean isUpdateRole = isNotBlank(role) && !role.equals(updateUser.getRole().getCode());
+        if (isUpdateRole) {
+            boolean validRole = BaseService.checkRoleCodeEnum(role);
+            boolean hasAdminPermission = BaseService.hasAdminPermission(authorities);
+
+            if (validRole && hasAdminPermission) {
+                updateUser.setRole(getRoleFunc.apply(AppUserRole.valueOf(role)));
             }
-        });
+        }
         return updateUser;
     }
 }

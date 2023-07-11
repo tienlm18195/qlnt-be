@@ -4,6 +4,7 @@ import com.tainika.qlnt.qlnt.dto.setting.UserDetailResponse;
 import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
 import com.tainika.qlnt.qlnt.dto.signup.NewUserResponse;
 import lombok.Data;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -60,7 +61,7 @@ public class User extends BaseModel {
             .build();
     }
 
-    public UserDetailResponse convertToDetailUserResponseData() {
+    public UserDetailResponse convertToDetailUserResponseData(boolean hasAdminPermission) {
         return UserDetailResponse.builder()
             .userId(id)
             .userName(userName)
@@ -74,6 +75,7 @@ public class User extends BaseModel {
             .avatarPath(avatarPath)
             .identityImagePath(identityImagePath)
             .status(status)
+            .role(hasAdminPermission ? role.getCode() : Strings.EMPTY)
             .isBlackList(isBlackList)
             .build();
     }

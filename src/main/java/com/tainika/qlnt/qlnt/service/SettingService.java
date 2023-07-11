@@ -6,7 +6,6 @@ import com.tainika.qlnt.qlnt.dto.setting.UsersRequest;
 import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
 import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.repository.UserRepository;
-import com.tainika.qlnt.qlnt.constants.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,10 +20,12 @@ import static com.tainika.qlnt.qlnt.constants.Message.ALERT.NO_RESULT;
 
 @Service
 public class SettingService {
+    private final BaseService baseService;
     private final UserRepository userRepository;
 
     @Autowired
-    public SettingService(UserRepository userRepository) {
+    public SettingService(BaseService baseService, UserRepository userRepository) {
+        this.baseService = baseService;
         this.userRepository = userRepository;
     }
 
@@ -52,9 +53,14 @@ public class SettingService {
     }
 
     public UserDetailResponse getUserDetailById(String userId) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<String> authorities = auth.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
+
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
-            return user.convertToDetailUserResponseData();
+            return user.convertToDetailUserResponseData(BaseService.hasAdminPermission(authorities));
         }
 
         throw MessageResultService.builder()
@@ -72,10 +78,10 @@ public class SettingService {
 
         User updateUser = userRepository.findById(userId).orElse(null);
         if (updateUser != null) {
-            User updated = request.updateUserByAuthorityOfLoginUser(updateUser, authorities);
+            User updated = request.updateUserByAuthorityOfLoginUser(updateUser, authorities, baseService::getOrCreateRole);
             userRepository.save(updated);
 
-            return updated.convertToDetailUserResponseData();
+            return updated.convertToDetailUserResponseData(BaseService.hasAdminPermission(authorities));
         }
 
         throw MessageResultService.builder()

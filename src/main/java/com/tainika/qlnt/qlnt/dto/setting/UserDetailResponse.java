@@ -20,5 +20,6 @@ public class UserDetailResponse {
     private String avatarPath;
     private String identityImagePath;
     private Integer status;
+    private String role;
     private boolean isBlackList;
 }
