@@ -4,16 +4,17 @@ import com.tainika.qlnt.qlnt.constants.AppUserRole;
 import com.tainika.qlnt.qlnt.model.Role;
 import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.service.BaseService;
+import com.tainika.qlnt.qlnt.service.MessageResultService;
 import lombok.Data;
 
 import java.util.List;
 import java.util.function.Function;
 
+import static com.tainika.qlnt.qlnt.constants.Message.ACTION.UPDATE;
 import static org.apache.logging.log4j.util.Strings.isNotBlank;
 
 @Data
 public class UserDetailRequest {
-    private String userId;
     private String userName;
     private String fullName;
     private String email;
@@ -29,7 +30,7 @@ public class UserDetailRequest {
 
     public User updateUserByAuthorityOfLoginUser(User updateUser,
                                                  List<String> authorities,
-                                                 Function<AppUserRole, Role> getRoleFunc) {
+                                                 Function<AppUserRole, Role> getRoleFunc) throws Exception {
         boolean isUpdateUserName = isNotBlank(userName) && !userName.equals(updateUser.getUserName());
         if (isUpdateUserName) updateUser.setUserName(userName);
 
@@ -64,6 +65,11 @@ public class UserDetailRequest {
 
             if (validRole && hasAdminPermission) {
                 updateUser.setRole(getRoleFunc.apply(AppUserRole.valueOf(role)));
+            } else {
+                 throw MessageResultService.builder()
+                    .action(UPDATE)
+                    .responseMessage("Update failure!! Not have a permission to update role")
+                    .build().withErrorResponse().throwIllegalAccessException();
             }
         }
         return updateUser;

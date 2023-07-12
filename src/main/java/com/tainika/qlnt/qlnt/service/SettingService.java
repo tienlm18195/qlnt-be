@@ -48,7 +48,7 @@ public class SettingService {
                 .action(GET_ALL)
                 .responseMessage(err.getMessage())
                 .build()
-            .withErrorResponse().throwException();
+            .withErrorResponse().throwRuntimeException();
         }
     }
 
@@ -67,7 +67,7 @@ public class SettingService {
             .action(GET_DETAIL)
             .content(NO_RESULT)
             .build()
-        .withFailureResponse().throwException();
+        .withFailureResponse().throwRuntimeException();
     }
 
     public UserDetailResponse updateUser(String userId, UserDetailRequest request) throws Exception {
@@ -88,6 +88,6 @@ public class SettingService {
             .action(UPDATE)
             .content("Update user are not existed")
             .build()
-        .withFailureResponse().throwException();
+        .withFailureResponse().throwRuntimeException();
     }
 }
