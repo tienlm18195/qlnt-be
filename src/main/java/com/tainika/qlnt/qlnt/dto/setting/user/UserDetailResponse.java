@@ -1,4 +1,4 @@
-package com.tainika.qlnt.qlnt.dto.setting;
+package com.tainika.qlnt.qlnt.dto.setting.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

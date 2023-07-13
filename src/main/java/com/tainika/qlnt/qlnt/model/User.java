@@ -1,7 +1,7 @@
 package com.tainika.qlnt.qlnt.model;
 
-import com.tainika.qlnt.qlnt.dto.setting.UserDetailResponse;
-import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
+import com.tainika.qlnt.qlnt.dto.setting.user.UserDetailResponse;
+import com.tainika.qlnt.qlnt.dto.setting.user.UsersResponse;
 import com.tainika.qlnt.qlnt.dto.signup.NewUserResponse;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;

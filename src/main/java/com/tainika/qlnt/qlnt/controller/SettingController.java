@@ -1,9 +1,11 @@
 package com.tainika.qlnt.qlnt.controller;
 
-import com.tainika.qlnt.qlnt.dto.setting.UserDetailRequest;
-import com.tainika.qlnt.qlnt.dto.setting.UserDetailResponse;
-import com.tainika.qlnt.qlnt.dto.setting.UsersRequest;
-import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
+import com.tainika.qlnt.qlnt.dto.setting.room.RoomsRequest;
+import com.tainika.qlnt.qlnt.dto.setting.room.RoomsResponse;
+import com.tainika.qlnt.qlnt.dto.setting.user.UserDetailRequest;
+import com.tainika.qlnt.qlnt.dto.setting.user.UserDetailResponse;
+import com.tainika.qlnt.qlnt.dto.setting.user.UsersRequest;
+import com.tainika.qlnt.qlnt.dto.setting.user.UsersResponse;
 import com.tainika.qlnt.qlnt.service.RoleService;
 import com.tainika.qlnt.qlnt.service.SettingService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,4 +49,10 @@ public class SettingController {
     public ResponseEntity<List<String>> findAllRoles() {
         return new ResponseEntity<>(roleService.findAllRoleCode(), HttpStatus.OK);
     }
+
+    @GetMapping(path = "/rooms")
+    public ResponseEntity<RoomsResponse> findAllRooms(@RequestBody RoomsRequest request) {
+        return new ResponseEntity<>(settingService.findAllRooms(request), HttpStatus.OK);
+    }
+
 }

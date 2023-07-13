@@ -1,7 +1,7 @@
 package com.tainika.qlnt.qlnt.repository.customImpl;
 
 import com.google.common.collect.Lists;
-import com.tainika.qlnt.qlnt.dto.setting.UsersRequest;
+import com.tainika.qlnt.qlnt.dto.setting.user.UsersRequest;
 import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.repository.UserRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;

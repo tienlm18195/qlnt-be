@@ -1,10 +1,14 @@
 package com.tainika.qlnt.qlnt.service;
 
-import com.tainika.qlnt.qlnt.dto.setting.UserDetailRequest;
-import com.tainika.qlnt.qlnt.dto.setting.UserDetailResponse;
-import com.tainika.qlnt.qlnt.dto.setting.UsersRequest;
-import com.tainika.qlnt.qlnt.dto.setting.UsersResponse;
+import com.tainika.qlnt.qlnt.dto.setting.room.RoomsRequest;
+import com.tainika.qlnt.qlnt.dto.setting.room.RoomsResponse;
+import com.tainika.qlnt.qlnt.dto.setting.user.UserDetailRequest;
+import com.tainika.qlnt.qlnt.dto.setting.user.UserDetailResponse;
+import com.tainika.qlnt.qlnt.dto.setting.user.UsersRequest;
+import com.tainika.qlnt.qlnt.dto.setting.user.UsersResponse;
+import com.tainika.qlnt.qlnt.model.Room;
 import com.tainika.qlnt.qlnt.model.User;
+import com.tainika.qlnt.qlnt.repository.RoomRepository;
 import com.tainika.qlnt.qlnt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,11 +26,15 @@ import static com.tainika.qlnt.qlnt.constants.Message.ALERT.NO_RESULT;
 public class SettingService {
     private final BaseService baseService;
     private final UserRepository userRepository;
+    private final RoomRepository roomRepository;
 
     @Autowired
-    public SettingService(BaseService baseService, UserRepository userRepository) {
+    public SettingService(BaseService baseService,
+                          UserRepository userRepository,
+                          RoomRepository roomRepository) {
         this.baseService = baseService;
         this.userRepository = userRepository;
+        this.roomRepository = roomRepository;
     }
 
     public UsersResponse getAllUser(UsersRequest request) throws Exception {
@@ -89,5 +97,22 @@ public class SettingService {
             .content("Update user are not existed")
             .build()
         .withFailureResponse().throwRuntimeException();
+    }
+
+    public RoomsResponse findAllRooms(RoomsRequest request) {
+        List<Room> roomList = roomRepository.searchAllRooms(request);
+        long total = roomRepository.countSearchAllRooms(request);
+
+        List<RoomsResponse.RoomRecord> records = roomList
+            .stream()
+            .map(Room::convertToRoomsResponseRecord)
+            .collect(Collectors.toList());
+
+        return RoomsResponse.builder()
+            .rooms(records)
+            .page(request.getPage())
+            .size(request.getSize())
+            .total((int) total)
+            .build();
     }
 }

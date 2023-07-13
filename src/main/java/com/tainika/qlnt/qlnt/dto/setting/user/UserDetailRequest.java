@@ -1,4 +1,4 @@
-package com.tainika.qlnt.qlnt.dto.setting;
+package com.tainika.qlnt.qlnt.dto.setting.user;
 
 import com.tainika.qlnt.qlnt.constants.AppUserRole;
 import com.tainika.qlnt.qlnt.model.Role;
