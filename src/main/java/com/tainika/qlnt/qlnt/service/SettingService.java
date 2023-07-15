@@ -1,6 +1,7 @@
 package com.tainika.qlnt.qlnt.service;
 
-import com.google.common.collect.Lists;
+import com.tainika.qlnt.qlnt.dto.setting.room.RoomDetailRequest;
+import com.tainika.qlnt.qlnt.dto.setting.room.RoomDetailResponse;
 import com.tainika.qlnt.qlnt.dto.setting.room.RoomsRequest;
 import com.tainika.qlnt.qlnt.dto.setting.room.RoomsResponse;
 import com.tainika.qlnt.qlnt.dto.setting.user.UserDetailRequest;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static com.tainika.qlnt.qlnt.constants.Message.ACTION.*;
 import static com.tainika.qlnt.qlnt.constants.Message.ALERT.NO_RESULT;
+import static com.tainika.qlnt.qlnt.ultil.DateUtils.now;
 
 @Service
 public class SettingService {
@@ -62,7 +64,7 @@ public class SettingService {
         }
     }
 
-    public UserDetailResponse getUserDetailById(String userId) throws Exception {
+    public UserDetailResponse getUserDetailById(String userId) throws RuntimeException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<String> authorities = auth.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
@@ -129,6 +131,24 @@ public class SettingService {
             .page(request.getPage())
             .size(request.getSize())
             .total((int) total)
+            .build();
+    }
+
+    public RoomDetailResponse createRoom(RoomDetailRequest request) throws IllegalAccessException {
+        BaseService.checkAdminPermissionWithAction(CREATE);
+
+        UserLoginDetails loginUser = (UserLoginDetails) SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getPrincipal();
+        Room newRoom = new Room();
+        newRoom.setCreateBy(loginUser.getId());
+        newRoom.setCreateTime(now());
+        newRoom.setUpdateTime(now());
+        roomRepository.save(request.updateRoom(newRoom));
+
+        return RoomDetailResponse.builder()
+            .id(newRoom.getId())
             .build();
     }
 }

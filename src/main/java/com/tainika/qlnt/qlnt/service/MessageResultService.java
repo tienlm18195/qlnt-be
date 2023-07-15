@@ -63,11 +63,11 @@ public class MessageResultService<T> {
         return this;
     }
 
-    public Exception throwRuntimeException() throws RuntimeException {
+    public RuntimeException throwRuntimeException() throws RuntimeException {
         throw new RuntimeException(Strings.nullToEmpty(responseMessage));
     }
 
-    public Exception throwIllegalAccessException() throws IllegalAccessException {
+    public IllegalAccessException throwIllegalAccessException() throws IllegalAccessException {
         throw new IllegalAccessException(Strings.nullToEmpty(responseMessage));
     }
 }

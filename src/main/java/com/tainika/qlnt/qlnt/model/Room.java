@@ -5,14 +5,12 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Data
 @Document(collection="room")
 public class Room extends BaseModel{
     private String id;
     @Indexed
-    private List<String> userIds;
+    private String userId;
     private String name;
     private String price;
     private Integer quantityPerson;

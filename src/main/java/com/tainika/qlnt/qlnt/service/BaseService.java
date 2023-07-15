@@ -4,10 +4,14 @@ import com.tainika.qlnt.qlnt.constants.AppUserRole;
 import com.tainika.qlnt.qlnt.constants.Status;
 import com.tainika.qlnt.qlnt.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.tainika.qlnt.qlnt.constants.AppUserPermission.AM01;
 import static com.tainika.qlnt.qlnt.constants.AppUserPermission.UR01;
@@ -27,6 +31,22 @@ public class BaseService {
 
     public static boolean hasUserPermission(List<String> authorities) {
         return authorities.contains(UR01.getPermission());
+    }
+
+    public static void checkAdminPermissionWithAction(String action) throws IllegalAccessException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<String> authorities = auth.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
+
+        boolean isAdmin = BaseService.hasAdminPermission(authorities);
+        if (!isAdmin) {
+             throw MessageResultService.builder()
+                .content("Permission deny !!")
+                .action(String.valueOf(action))
+                .build().withFailureResponse()
+                .throwIllegalAccessException();
+        }
     }
 
     public static boolean checkRoleCodeEnum(String roleCode) {

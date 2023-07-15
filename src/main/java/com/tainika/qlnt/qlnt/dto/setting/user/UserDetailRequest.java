@@ -68,8 +68,8 @@ public class UserDetailRequest {
             } else {
                  throw MessageResultService.builder()
                     .action(UPDATE)
-                    .responseMessage("Update failure!! Not have a permission to update role")
-                    .build().withErrorResponse().throwIllegalAccessException();
+                    .content("Update failure!! Not have a permission to update role")
+                    .build().withFailureResponse().throwIllegalAccessException();
             }
         }
         return updateUser;

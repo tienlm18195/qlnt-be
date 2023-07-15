@@ -19,7 +19,7 @@ import static org.apache.logging.log4j.util.Strings.isNotBlank;
 
 public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
 
-    private static final String USER_IDS_FIELD = "userIds";
+    private static final String USER_ID_FIELD = "userId";
     private static final String NAME_FIELD = "name";
     private static final String PRICE_FIELD = "price";
     private static final String QUANTITY_PERSON_FIELD = "quantityPerson";
@@ -66,7 +66,7 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
 
         if (isNotBlank(request.getUserId())) {
             criteriaList.add(
-                Criteria.where(USER_IDS_FIELD).all(request.getUserId())
+                Criteria.where(USER_ID_FIELD).is(request.getUserId())
             );
         }
 

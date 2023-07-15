@@ -1,5 +1,7 @@
 package com.tainika.qlnt.qlnt.controller;
 
+import com.tainika.qlnt.qlnt.dto.setting.room.RoomDetailRequest;
+import com.tainika.qlnt.qlnt.dto.setting.room.RoomDetailResponse;
 import com.tainika.qlnt.qlnt.dto.setting.room.RoomsRequest;
 import com.tainika.qlnt.qlnt.dto.setting.room.RoomsResponse;
 import com.tainika.qlnt.qlnt.dto.setting.user.UserDetailRequest;
@@ -55,4 +57,12 @@ public class SettingController {
         return new ResponseEntity<>(settingService.findAllRooms(request), HttpStatus.OK);
     }
 
+    @PostMapping(path = "/rooms")
+    public ResponseEntity<?> createRoom(@RequestBody RoomDetailRequest request) {
+        try {
+            return new ResponseEntity<>(settingService.createRoom(request), HttpStatus.OK);
+        } catch (IllegalAccessException accessException) {
+            return new ResponseEntity<>(accessException.toString(), HttpStatus.FORBIDDEN);
+        }
+    }
 }
