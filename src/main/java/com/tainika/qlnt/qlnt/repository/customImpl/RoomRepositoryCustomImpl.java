@@ -21,6 +21,7 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
 
     private static final String NAME_FIELD = "name";
     private static final String PRICE_FIELD = "price";
+    private static final String QUANTITY_PERSON_FIELD = "quantityPerson";
     private static final String STATUS_FIELD = "status";
     private static final String IS_DELETED_FIELD = "isDeleted";
     private static final String CREATE_TIME_FIELD = "createTime";
@@ -72,6 +73,26 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
             criteriaList.add(Criteria.where(STATUS_FIELD)
                 .is(request.getStatus())
             );
+        }
+
+        if (isNotBlank(request.getPriceFrom())) {
+            criteriaList.add(Criteria.where(PRICE_FIELD)
+                .gte(request.getPriceFrom()));
+        }
+
+        if (isNotBlank(request.getPriceTo())) {
+            criteriaList.add(Criteria.where(PRICE_FIELD)
+                .lte(request.getPriceTo()));
+        }
+
+        if (isNotBlank(request.getQuantityPersonFrom())) {
+            criteriaList.add(Criteria.where(QUANTITY_PERSON_FIELD)
+                .gte(request.getQuantityPersonFrom()));
+        }
+
+        if (isNotBlank(request.getQuantityPersonTo())) {
+            criteriaList.add(Criteria.where(QUANTITY_PERSON_FIELD)
+                .lte(request.getQuantityPersonTo()));
         }
 
         criteriaList.add(Criteria.where(IS_DELETED_FIELD).is(request.isDeleted()));
