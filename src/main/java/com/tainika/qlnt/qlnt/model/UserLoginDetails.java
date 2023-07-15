@@ -1,6 +1,7 @@
 package com.tainika.qlnt.qlnt.model;
 
 import com.tainika.qlnt.qlnt.constants.Status;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
 public class UserLoginDetails implements UserDetails {
+    private String id;
     private String userName;
     private String password;
     private Integer status;
@@ -18,6 +21,7 @@ public class UserLoginDetails implements UserDetails {
     public UserLoginDetails() {}
 
     public UserLoginDetails(User user) {
+        this.id = user.getId();
         this.userName = user.getUserName();
         this.password = user.getPassword();
         this.status = user.getStatus();

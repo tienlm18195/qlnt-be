@@ -2,21 +2,26 @@ package com.tainika.qlnt.qlnt.model;
 
 import com.tainika.qlnt.qlnt.dto.setting.room.RoomsResponse;
 import lombok.Data;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Data
 @Document(collection="room")
 public class Room extends BaseModel{
-    public String id;
-    public String name;
-    public String price;
-    public Integer quantityPerson;
-    public String garbagePrice;
-    public String waterPrice;
-    public String electricPrice;
-    public String internetPrice;
-    public Integer status;
-    public boolean isDeleted;
+    private String id;
+    @Indexed
+    private List<String> userIds;
+    private String name;
+    private String price;
+    private Integer quantityPerson;
+    private String garbagePrice;
+    private String waterPrice;
+    private String electricPrice;
+    private String internetPrice;
+    private Integer status;
+    private boolean isDeleted;
 
     public RoomsResponse.RoomRecord convertToRoomsResponseRecord() {
         return RoomsResponse.RoomRecord.builder()

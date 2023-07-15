@@ -1,5 +1,6 @@
 package com.tainika.qlnt.qlnt.service;
 
+import com.google.common.collect.Lists;
 import com.tainika.qlnt.qlnt.dto.setting.room.RoomsRequest;
 import com.tainika.qlnt.qlnt.dto.setting.room.RoomsResponse;
 import com.tainika.qlnt.qlnt.dto.setting.user.UserDetailRequest;
@@ -8,6 +9,7 @@ import com.tainika.qlnt.qlnt.dto.setting.user.UsersRequest;
 import com.tainika.qlnt.qlnt.dto.setting.user.UsersResponse;
 import com.tainika.qlnt.qlnt.model.Room;
 import com.tainika.qlnt.qlnt.model.User;
+import com.tainika.qlnt.qlnt.model.UserLoginDetails;
 import com.tainika.qlnt.qlnt.repository.RoomRepository;
 import com.tainika.qlnt.qlnt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +75,7 @@ public class SettingService {
 
         throw MessageResultService.builder()
             .action(GET_DETAIL)
-            .content(NO_RESULT)
+            .responseMessage(NO_RESULT)
             .build()
         .withFailureResponse().throwRuntimeException();
     }
@@ -94,12 +96,26 @@ public class SettingService {
 
         throw MessageResultService.builder()
             .action(UPDATE)
-            .content("Update user are not existed")
+            .responseMessage("Update user are not existed")
             .build()
         .withFailureResponse().throwRuntimeException();
     }
 
     public RoomsResponse findAllRooms(RoomsRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<String> authorities = auth.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
+
+        boolean isAdmin = BaseService.hasAdminPermission(authorities);
+        if (!isAdmin) {
+            UserLoginDetails loginUser = (UserLoginDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+            request.setUserId(loginUser.getId());
+        }
+
         List<Room> roomList = roomRepository.searchAllRooms(request);
         long total = roomRepository.countSearchAllRooms(request);
 

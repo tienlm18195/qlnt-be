@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class RoomsRequest {
+    private String userId;
     private String name;
     private String priceFrom;
     private String priceTo;
