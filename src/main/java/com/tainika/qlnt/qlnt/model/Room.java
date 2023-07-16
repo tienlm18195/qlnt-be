@@ -19,7 +19,6 @@ public class Room extends BaseModel{
     private String electricPrice;
     private String internetPrice;
     private Integer status;
-    private boolean isDeleted;
 
     public RoomsResponse.RoomRecord convertToRoomsResponseRecord() {
         return RoomsResponse.RoomRecord.builder()

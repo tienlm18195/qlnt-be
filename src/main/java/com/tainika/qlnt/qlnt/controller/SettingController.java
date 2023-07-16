@@ -65,4 +65,15 @@ public class SettingController {
             return new ResponseEntity<>(accessException.toString(), HttpStatus.FORBIDDEN);
         }
     }
+
+    @PutMapping(path = "/room/{id}")
+    public ResponseEntity<?> updateRoom(@PathVariable String id, @RequestBody RoomDetailRequest request) {
+        try {
+            return new ResponseEntity<>(settingService.updateRoom(id, request), HttpStatus.OK);
+        } catch (IllegalAccessException accessException) {
+            return new ResponseEntity<>(accessException.toString(), HttpStatus.FORBIDDEN);
+        } catch (RuntimeException runtimeException) {
+            return new ResponseEntity<>(runtimeException.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

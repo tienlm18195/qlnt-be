@@ -143,12 +143,38 @@ public class SettingService {
             .getPrincipal();
         Room newRoom = new Room();
         newRoom.setCreateBy(loginUser.getId());
+        newRoom.setUpdateBy(loginUser.getId());
         newRoom.setCreateTime(now());
         newRoom.setUpdateTime(now());
         roomRepository.save(request.updateRoom(newRoom));
 
         return RoomDetailResponse.builder()
             .id(newRoom.getId())
+            .build();
+    }
+
+    public RoomDetailResponse updateRoom(String roomId, RoomDetailRequest request) throws IllegalAccessException {
+        BaseService.checkAdminPermissionWithAction(UPDATE);
+
+        UserLoginDetails loginUser = (UserLoginDetails) SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getPrincipal();
+        Room updateRoom = roomRepository.findById(roomId).orElse(null);
+
+        if (updateRoom == null) {
+            throw MessageResultService.builder()
+                .content("Not found room id: " + roomId)
+                .action(UPDATE).build().withFailureResponse()
+                .throwRuntimeException();
+        }
+
+        updateRoom.setUpdateBy(loginUser.getId());
+        updateRoom.setUpdateTime(now());
+        roomRepository.save(request.updateRoom(updateRoom));
+
+        return RoomDetailResponse.builder()
+            .id(updateRoom.getId())
             .build();
     }
 }
