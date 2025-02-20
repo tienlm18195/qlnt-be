@@ -1,8 +1,10 @@
 package com.tainika.qlnt.qlnt.dto.setting.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class UsersRequest {
     private String fullName;
     private String email;

@@ -33,9 +33,21 @@ public class SettingController {
     }
 
     @GetMapping(path = "/users")
-    public ResponseEntity<UsersResponse> findAllUser(@RequestBody UsersRequest request) throws Exception {
+    public ResponseEntity<UsersResponse> findAllUser(
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String identityNumber,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) Boolean isBlackList,
+            @RequestParam(required = false) Boolean isDeleted,
+            @RequestParam(required = false) int status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) throws Exception {
+        UsersRequest request = new UsersRequest(fullName, email, phone, identityNumber, address, isBlackList, isDeleted, status, page, size);
         return new ResponseEntity<>(settingService.getAllUser(request), HttpStatus.OK);
     }
+
 
     @GetMapping(path = "/user/{id}")
     public ResponseEntity<UserDetailResponse> findById(@PathVariable String id) throws Exception {
