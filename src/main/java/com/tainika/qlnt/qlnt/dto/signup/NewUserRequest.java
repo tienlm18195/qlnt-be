@@ -14,7 +14,7 @@ public class NewUserRequest {
     private String fullName;
     private String email;
     private int age;
-    private int birthYear;
+    private String birthYear;
     private String phoneNumber;
     private String identityNumber;
     private String address;
@@ -27,7 +27,7 @@ public class NewUserRequest {
         rs.setFullName(nullToEmpty(fullName));
         rs.setEmail(nullToEmpty(email));
         rs.setAge(age);
-        rs.setBirthYear(birthYear);
+        rs.setDateOfBirth(birthYear);
         rs.setPhone(nullToEmpty(phoneNumber));
         rs.setIdentityNumber(nullToEmpty(identityNumber));
         rs.setAddress(nullToEmpty(address));

@@ -27,7 +27,7 @@ public class User extends BaseModel {
     @Indexed
     private String email;
     private Integer age;
-    private Integer birthYear;
+    private String dateOfBirth;
     private String phone;
     private String identityNumber;
     private String address;
@@ -54,7 +54,7 @@ public class User extends BaseModel {
             .userId(id)
             .email(email)
             .fullName(fullName)
-            .birthYear(birthYear)
+            .dateOfBirth(dateOfBirth)
             .avatarPath(avatarPath)
             .status(status)
             .isBlackList(isBlackList)
@@ -70,7 +70,7 @@ public class User extends BaseModel {
             .phone(phone)
             .identityNumber(identityNumber)
             .address(address)
-            .birthYear(birthYear)
+            .dateOfBirth(dateOfBirth)
             .workPlace(workPlace)
             .avatarPath(avatarPath)
             .identityImagePath(identityImagePath)

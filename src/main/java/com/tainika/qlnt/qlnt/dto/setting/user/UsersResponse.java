@@ -23,7 +23,7 @@ public class UsersResponse {
         private String userId;
         private String fullName;
         private String email;
-        private Integer birthYear;
+        private String dateOfBirth;
         private String avatarPath;
         private Integer status;
         private boolean isBlackList;

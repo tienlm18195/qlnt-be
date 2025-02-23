@@ -97,28 +97,28 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         if (isNotBlank(request.getEmail())) {
             criteriaList.add(
                 Criteria.where(EMAIL_FIELD)
-                    .is(request.getEmail())
+                    .regex(Pattern.compile(request.getEmail(), Pattern.CASE_INSENSITIVE))
             );
         }
 
         if (isNotBlank(request.getPhone())) {
             criteriaList.add(
                 Criteria.where(PHONE_FIELD)
-                    .is(request.getEmail())
+                    .regex(Pattern.compile(request.getPhone(), Pattern.CASE_INSENSITIVE))
             );
         }
 
         if (isNotBlank(request.getIdentityNumber())) {
             criteriaList.add(
                 Criteria.where(IDENTITY_NUMBER_FIELD)
-                    .is(request.getEmail())
+                    .regex(Pattern.compile(request.getIdentityNumber(), Pattern.CASE_INSENSITIVE))
             );
         }
 
         if (isNotBlank(request.getAddress())) {
             criteriaList.add(
                 Criteria.where(ADDRESS_NUMBER_FIELD)
-                    .is(request.getEmail())
+                    .regex(Pattern.compile(request.getAddress(), Pattern.CASE_INSENSITIVE))
             );
         }
 

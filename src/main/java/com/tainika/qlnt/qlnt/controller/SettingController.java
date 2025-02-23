@@ -59,6 +59,11 @@ public class SettingController {
         return new ResponseEntity<>(settingService.updateUser(id, request), HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/user/{id}")
+    public ResponseEntity<UserDetailResponse> deleteUser(@PathVariable String id) throws Exception {
+        return new ResponseEntity<>(settingService.deleteUser(id), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/roles")
     public ResponseEntity<List<String>> findAllRoles() {
         return new ResponseEntity<>(roleService.findAllRoleCode(), HttpStatus.OK);

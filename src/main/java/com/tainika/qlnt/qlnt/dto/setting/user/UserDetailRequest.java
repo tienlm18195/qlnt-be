@@ -6,6 +6,7 @@ import com.tainika.qlnt.qlnt.model.User;
 import com.tainika.qlnt.qlnt.service.BaseService;
 import com.tainika.qlnt.qlnt.service.MessageResultService;
 import lombok.Data;
+import org.apache.logging.log4j.util.Strings;
 
 import java.util.List;
 import java.util.function.Function;
@@ -22,7 +23,7 @@ public class UserDetailRequest {
     private String identityNumber;
     private String workPlace;
     private String address;
-    private Integer birthYear;
+    private String dateOfBirth;
     private String avatarPath;
     private Integer status;
     private String role;
@@ -52,8 +53,8 @@ public class UserDetailRequest {
         boolean isUpdateWorkPlace = isNotBlank(workPlace) && !workPlace.equals(updateUser.getWorkPlace());
         if (isUpdateWorkPlace) updateUser.setWorkPlace(workPlace);
 
-        boolean isUpdateBirthYear = birthYear != null && birthYear > 0 && !birthYear.equals(updateUser.getBirthYear());
-        if (isUpdateBirthYear) updateUser.setBirthYear(birthYear);
+        boolean isUpdateBirthYear = Strings.isNotBlank(dateOfBirth) && !dateOfBirth.equals(updateUser.getDateOfBirth());
+        if (isUpdateBirthYear) updateUser.setDateOfBirth(dateOfBirth);
 
         boolean isUpdateAvatarPath = isNotBlank(avatarPath) && !avatarPath.equals(updateUser.getAvatarPath());
         if (isUpdateAvatarPath) updateUser.setAvatarPath(avatarPath);

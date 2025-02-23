@@ -16,7 +16,7 @@ public class UserDetailResponse {
     private String identityNumber;
     private String workPlace;
     private String address;
-    private Integer birthYear;
+    private String dateOfBirth;
     private String avatarPath;
     private String identityImagePath;
     private Integer status;

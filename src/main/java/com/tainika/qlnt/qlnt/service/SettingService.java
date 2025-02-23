@@ -102,6 +102,26 @@ public class SettingService {
             .build()
         .withFailureResponse().throwRuntimeException();
     }
+    public UserDetailResponse deleteUser(String userId) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<String> authorities = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        User deleteUser = userRepository.findById(userId).orElse(null);
+        if (deleteUser != null) {
+            deleteUser.setDeleted(Boolean.TRUE);
+            userRepository.save(deleteUser);
+
+            return deleteUser.convertToDetailUserResponseData(BaseService.hasAdminPermission(authorities));
+        }
+
+        throw MessageResultService.builder()
+                .action(UPDATE)
+                .responseMessage("Update user are not existed")
+                .build()
+                .withFailureResponse().throwRuntimeException();
+    }
 
     public RoomsResponse findAllRooms(RoomsRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
