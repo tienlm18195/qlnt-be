@@ -22,4 +22,5 @@ public class UserDetailResponse {
     private Integer status;
     private String role;
     private boolean isBlackList;
+    private boolean isDeleted;
 }

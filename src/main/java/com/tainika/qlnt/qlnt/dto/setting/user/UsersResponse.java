@@ -27,5 +27,6 @@ public class UsersResponse {
         private String avatarPath;
         private Integer status;
         private boolean isBlackList;
+        private boolean isDeleted;
     }
 }

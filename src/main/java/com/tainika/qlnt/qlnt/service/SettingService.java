@@ -110,7 +110,7 @@ public class SettingService {
 
         User deleteUser = userRepository.findById(userId).orElse(null);
         if (deleteUser != null) {
-            deleteUser.setDeleted(Boolean.TRUE);
+            deleteUser.setDeleted(!deleteUser.isDeleted());
             userRepository.save(deleteUser);
 
             return deleteUser.convertToDetailUserResponseData(BaseService.hasAdminPermission(authorities));

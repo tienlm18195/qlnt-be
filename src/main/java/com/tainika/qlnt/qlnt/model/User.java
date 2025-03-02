@@ -58,6 +58,7 @@ public class User extends BaseModel {
             .avatarPath(avatarPath)
             .status(status)
             .isBlackList(isBlackList)
+            .isDeleted(isDeleted())
             .build();
     }
 
@@ -77,6 +78,7 @@ public class User extends BaseModel {
             .status(status)
             .role(hasAdminPermission ? role.getCode() : Strings.EMPTY)
             .isBlackList(isBlackList)
+            .isDeleted(isDeleted())
             .build();
     }
 }
